@@ -3,6 +3,7 @@ const mapDBToModel = ({
   title,
   body,
   tags,
+  owner,
   created_at,
   updated_at,
 }) => ({
@@ -10,6 +11,7 @@ const mapDBToModel = ({
   title,
   body,
   tags,
+  owner,
   createdAt: created_at,
   updatedAt: updated_at,
 });
