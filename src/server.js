@@ -4,23 +4,23 @@ const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
 const Inert = require('@hapi/inert');
 
-// notes
+// Notes
 const notes = require('./api/notes');
 const NotesService = require('./service/postgres/NotesService');
 const NotesValidator = require('./validator/notes');
 
-// users
+// Users
 const users = require('./api/users');
 const UsersService = require('./service/postgres/UsersService');
 const UsersValidator = require('./validator/users');
 
-// authentications
+// Authentications
 const authentications = require('./api/authentications');
 const AuthenticationsService = require('./service/postgres/AuthenticationsService');
 const TokenManager = require('./tokenize/TokenManager');
 const AuthenticationsValidator = require('./validator/authentications');
 
-// collaborations
+// Collaborations
 const collaborations = require('./api/collaborations');
 const CollaborationsService = require('./service/postgres/CollaborationsService');
 const CollaborationsValidator = require('./validator/collaborations');
@@ -30,14 +30,18 @@ const _exports = require('./api/exports');
 const ProducerService = require('./service/rabbitmq/ProducerService');
 const ExportsValidator = require('./validator/exports');
 
-// uploads
+// Uploads
 const uploads = require('./api/uploads');
 const StorageService = require('./service/S3/StorageService');
 const UploadsValidator = require('./validator/uploads');
 
+// Cache
+const CacheService = require('./service/redis/CacheService');
+
 const init = async () => {
-  const collaborationsService = new CollaborationsService();
-  const notesService = new NotesService(collaborationsService);
+  const cacheService = new CacheService();
+  const collaborationsService = new CollaborationsService(cacheService);
+  const notesService = new NotesService(collaborationsService, cacheService);
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
   const storageService = new StorageService();
